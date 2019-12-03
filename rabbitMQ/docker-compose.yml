@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  rabbit-producer:
+    build:
+      context: producer
+      dockerfile: ./Dockerfile.yml
+    network_mode: "host"
+    ports:
+      - 8888:8888
+
+  rabbit-consumer:
+    build:
+      context: consumer
+      dockerfile: ./Dockerfile.yml
+    network_mode: "host"
+    ports:
+      - 8889:8889
+
+  rabbitmq:
+    image: 'bitnami/rabbitmq:3'
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - 4369:4369
+      - 5672:5672
+      - 25672:25672
+      - 15672:15672
+    volumes:
+      - ./rabbitmq_data:/bitnami
+
